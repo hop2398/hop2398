@@ -1,0 +1,638 @@
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"main.c"
+  12              		.text
+  13              		.section	.rodata
+  14              		.align	2
+  15              	.LC0:
+  16 0000 53544D33 		.ascii	"STM32F103C8T6\000"
+  16      32463130 
+  16      33433854 
+  16      3600
+  17 000e 0000     		.align	2
+  18              	.LC1:
+  19 0010 4932433A 		.ascii	"I2C: PA0 - PA1\000"
+  19      20504130 
+  19      202D2050 
+  19      413100
+  20              		.section	.text.main,"ax",%progbits
+  21              		.align	1
+  22              		.global	main
+  23              		.arch armv7-m
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  27              		.fpu softvfp
+  29              	main:
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33 0002 84B0     		sub	sp, sp, #16
+  34 0004 00AF     		add	r7, sp, #0
+  35 0006 0121     		movs	r1, #1
+  36 0008 1020     		movs	r0, #16
+  37 000a FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  38 000e 0121     		movs	r1, #1
+  39 0010 0420     		movs	r0, #4
+  40 0012 FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  41 0016 0121     		movs	r1, #1
+  42 0018 0120     		movs	r0, #1
+  43 001a FFF7FEFF 		bl	RCC_APB1PeriphClockCmd
+  44 001e 1023     		movs	r3, #16
+  45 0020 FB73     		strb	r3, [r7, #15]
+  46 0022 4FF40053 		mov	r3, #8192
+  47 0026 BB81     		strh	r3, [r7, #12]	@ movhi
+  48 0028 0323     		movs	r3, #3
+  49 002a BB73     		strb	r3, [r7, #14]
+  50 002c 07F10C03 		add	r3, r7, #12
+  51 0030 1946     		mov	r1, r3
+  52 0032 2248     		ldr	r0, .L3
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 2
+
+
+  53 0034 FFF7FEFF 		bl	GPIO_Init
+  54 0038 1023     		movs	r3, #16
+  55 003a FB73     		strb	r3, [r7, #15]
+  56 003c 0123     		movs	r3, #1
+  57 003e BB81     		strh	r3, [r7, #12]	@ movhi
+  58 0040 0323     		movs	r3, #3
+  59 0042 BB73     		strb	r3, [r7, #14]
+  60 0044 07F10C03 		add	r3, r7, #12
+  61 0048 1946     		mov	r1, r3
+  62 004a 1D48     		ldr	r0, .L3+4
+  63 004c FFF7FEFF 		bl	GPIO_Init
+  64 0050 0023     		movs	r3, #0
+  65 0052 7B80     		strh	r3, [r7, #2]	@ movhi
+  66 0054 4FF6FF73 		movw	r3, #65535
+  67 0058 BB80     		strh	r3, [r7, #4]	@ movhi
+  68 005a 4723     		movs	r3, #71
+  69 005c 3B80     		strh	r3, [r7]	@ movhi
+  70 005e 3B46     		mov	r3, r7
+  71 0060 1946     		mov	r1, r3
+  72 0062 4FF08040 		mov	r0, #1073741824
+  73 0066 FFF7FEFF 		bl	TIM_TimeBaseInit
+  74 006a 0121     		movs	r1, #1
+  75 006c 4FF08040 		mov	r0, #1073741824
+  76 0070 FFF7FEFF 		bl	TIM_Cmd
+  77 0074 FFF7FEFF 		bl	i2c_init
+  78 0078 FFF7FEFF 		bl	I2C_LCD_Init
+  79 007c FFF7FEFF 		bl	I2C_LCD_Clear
+  80 0080 0120     		movs	r0, #1
+  81 0082 FFF7FEFF 		bl	I2C_LCD_BackLight
+  82 0086 0F48     		ldr	r0, .L3+8
+  83 0088 FFF7FEFF 		bl	I2C_LCD_Puts
+  84 008c FFF7FEFF 		bl	I2C_LCD_NewLine
+  85 0090 0D48     		ldr	r0, .L3+12
+  86 0092 FFF7FEFF 		bl	I2C_LCD_Puts
+  87              	.L2:
+  88 0096 4FF40051 		mov	r1, #8192
+  89 009a 0848     		ldr	r0, .L3
+  90 009c FFF7FEFF 		bl	GPIO_SetBits
+  91 00a0 4FF4FA70 		mov	r0, #500
+  92 00a4 FFF7FEFF 		bl	Delay_Ms
+  93 00a8 4FF40051 		mov	r1, #8192
+  94 00ac 0348     		ldr	r0, .L3
+  95 00ae FFF7FEFF 		bl	GPIO_ResetBits
+  96 00b2 4FF4FA70 		mov	r0, #500
+  97 00b6 FFF7FEFF 		bl	Delay_Ms
+  98 00ba ECE7     		b	.L2
+  99              	.L4:
+ 100              		.align	2
+ 101              	.L3:
+ 102 00bc 00100140 		.word	1073811456
+ 103 00c0 00080140 		.word	1073809408
+ 104 00c4 00000000 		.word	.LC0
+ 105 00c8 10000000 		.word	.LC1
+ 107              		.section	.text.Delay1Ms,"ax",%progbits
+ 108              		.align	1
+ 109              		.global	Delay1Ms
+ 110              		.syntax unified
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 3
+
+
+ 111              		.thumb
+ 112              		.thumb_func
+ 113              		.fpu softvfp
+ 115              	Delay1Ms:
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 1, uses_anonymous_args = 0
+ 118 0000 80B5     		push	{r7, lr}
+ 119 0002 00AF     		add	r7, sp, #0
+ 120 0004 0021     		movs	r1, #0
+ 121 0006 4FF08040 		mov	r0, #1073741824
+ 122 000a FFF7FEFF 		bl	TIM_SetCounter
+ 123 000e 00BF     		nop
+ 124              	.L6:
+ 125 0010 4FF08040 		mov	r0, #1073741824
+ 126 0014 FFF7FEFF 		bl	TIM_GetCounter
+ 127 0018 0346     		mov	r3, r0
+ 128 001a B3F57A7F 		cmp	r3, #1000
+ 129 001e F7D3     		bcc	.L6
+ 130 0020 00BF     		nop
+ 131 0022 00BF     		nop
+ 132 0024 80BD     		pop	{r7, pc}
+ 134              		.section	.text.delay_us,"ax",%progbits
+ 135              		.align	1
+ 136              		.global	delay_us
+ 137              		.syntax unified
+ 138              		.thumb
+ 139              		.thumb_func
+ 140              		.fpu softvfp
+ 142              	delay_us:
+ 143              		@ args = 0, pretend = 0, frame = 8
+ 144              		@ frame_needed = 1, uses_anonymous_args = 0
+ 145 0000 80B5     		push	{r7, lr}
+ 146 0002 82B0     		sub	sp, sp, #8
+ 147 0004 00AF     		add	r7, sp, #0
+ 148 0006 7860     		str	r0, [r7, #4]
+ 149 0008 0021     		movs	r1, #0
+ 150 000a 4FF08040 		mov	r0, #1073741824
+ 151 000e FFF7FEFF 		bl	TIM_SetCounter
+ 152 0012 00BF     		nop
+ 153              	.L8:
+ 154 0014 4FF08040 		mov	r0, #1073741824
+ 155 0018 FFF7FEFF 		bl	TIM_GetCounter
+ 156 001c 0346     		mov	r3, r0
+ 157 001e 1A46     		mov	r2, r3
+ 158 0020 7B68     		ldr	r3, [r7, #4]
+ 159 0022 9342     		cmp	r3, r2
+ 160 0024 F6D8     		bhi	.L8
+ 161 0026 00BF     		nop
+ 162 0028 00BF     		nop
+ 163 002a 0837     		adds	r7, r7, #8
+ 164 002c BD46     		mov	sp, r7
+ 165              		@ sp needed
+ 166 002e 80BD     		pop	{r7, pc}
+ 168              		.section	.text.Delay_Ms,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	Delay_Ms
+ 171              		.syntax unified
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 4
+
+
+ 172              		.thumb
+ 173              		.thumb_func
+ 174              		.fpu softvfp
+ 176              	Delay_Ms:
+ 177              		@ args = 0, pretend = 0, frame = 8
+ 178              		@ frame_needed = 1, uses_anonymous_args = 0
+ 179 0000 80B5     		push	{r7, lr}
+ 180 0002 82B0     		sub	sp, sp, #8
+ 181 0004 00AF     		add	r7, sp, #0
+ 182 0006 7860     		str	r0, [r7, #4]
+ 183 0008 04E0     		b	.L10
+ 184              	.L11:
+ 185 000a FFF7FEFF 		bl	Delay1Ms
+ 186 000e 7B68     		ldr	r3, [r7, #4]
+ 187 0010 013B     		subs	r3, r3, #1
+ 188 0012 7B60     		str	r3, [r7, #4]
+ 189              	.L10:
+ 190 0014 7B68     		ldr	r3, [r7, #4]
+ 191 0016 002B     		cmp	r3, #0
+ 192 0018 F7D1     		bne	.L11
+ 193 001a 00BF     		nop
+ 194 001c 00BF     		nop
+ 195 001e 0837     		adds	r7, r7, #8
+ 196 0020 BD46     		mov	sp, r7
+ 197              		@ sp needed
+ 198 0022 80BD     		pop	{r7, pc}
+ 200              		.section	.text.i2c_init,"ax",%progbits
+ 201              		.align	1
+ 202              		.global	i2c_init
+ 203              		.syntax unified
+ 204              		.thumb
+ 205              		.thumb_func
+ 206              		.fpu softvfp
+ 208              	i2c_init:
+ 209              		@ args = 0, pretend = 0, frame = 8
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211 0000 80B5     		push	{r7, lr}
+ 212 0002 82B0     		sub	sp, sp, #8
+ 213 0004 00AF     		add	r7, sp, #0
+ 214 0006 0121     		movs	r1, #1
+ 215 0008 0420     		movs	r0, #4
+ 216 000a FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+ 217 000e 1423     		movs	r3, #20
+ 218 0010 FB71     		strb	r3, [r7, #7]
+ 219 0012 0323     		movs	r3, #3
+ 220 0014 BB80     		strh	r3, [r7, #4]	@ movhi
+ 221 0016 0323     		movs	r3, #3
+ 222 0018 BB71     		strb	r3, [r7, #6]
+ 223 001a 3B1D     		adds	r3, r7, #4
+ 224 001c 1946     		mov	r1, r3
+ 225 001e 0748     		ldr	r0, .L13
+ 226 0020 FFF7FEFF 		bl	GPIO_Init
+ 227 0024 0121     		movs	r1, #1
+ 228 0026 0548     		ldr	r0, .L13
+ 229 0028 FFF7FEFF 		bl	GPIO_SetBits
+ 230 002c 0221     		movs	r1, #2
+ 231 002e 0348     		ldr	r0, .L13
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 5
+
+
+ 232 0030 FFF7FEFF 		bl	GPIO_SetBits
+ 233 0034 00BF     		nop
+ 234 0036 0837     		adds	r7, r7, #8
+ 235 0038 BD46     		mov	sp, r7
+ 236              		@ sp needed
+ 237 003a 80BD     		pop	{r7, pc}
+ 238              	.L14:
+ 239              		.align	2
+ 240              	.L13:
+ 241 003c 00080140 		.word	1073809408
+ 243              		.section	.text.i2c_start,"ax",%progbits
+ 244              		.align	1
+ 245              		.global	i2c_start
+ 246              		.syntax unified
+ 247              		.thumb
+ 248              		.thumb_func
+ 249              		.fpu softvfp
+ 251              	i2c_start:
+ 252              		@ args = 0, pretend = 0, frame = 0
+ 253              		@ frame_needed = 1, uses_anonymous_args = 0
+ 254 0000 80B5     		push	{r7, lr}
+ 255 0002 00AF     		add	r7, sp, #0
+ 256 0004 0221     		movs	r1, #2
+ 257 0006 0E48     		ldr	r0, .L16
+ 258 0008 FFF7FEFF 		bl	GPIO_SetBits
+ 259 000c 0320     		movs	r0, #3
+ 260 000e FFF7FEFF 		bl	delay_us
+ 261 0012 0121     		movs	r1, #1
+ 262 0014 0A48     		ldr	r0, .L16
+ 263 0016 FFF7FEFF 		bl	GPIO_SetBits
+ 264 001a 0320     		movs	r0, #3
+ 265 001c FFF7FEFF 		bl	delay_us
+ 266 0020 0121     		movs	r1, #1
+ 267 0022 0748     		ldr	r0, .L16
+ 268 0024 FFF7FEFF 		bl	GPIO_ResetBits
+ 269 0028 0320     		movs	r0, #3
+ 270 002a FFF7FEFF 		bl	delay_us
+ 271 002e 0221     		movs	r1, #2
+ 272 0030 0348     		ldr	r0, .L16
+ 273 0032 FFF7FEFF 		bl	GPIO_ResetBits
+ 274 0036 0320     		movs	r0, #3
+ 275 0038 FFF7FEFF 		bl	delay_us
+ 276 003c 00BF     		nop
+ 277 003e 80BD     		pop	{r7, pc}
+ 278              	.L17:
+ 279              		.align	2
+ 280              	.L16:
+ 281 0040 00080140 		.word	1073809408
+ 283              		.section	.text.i2c_stop,"ax",%progbits
+ 284              		.align	1
+ 285              		.global	i2c_stop
+ 286              		.syntax unified
+ 287              		.thumb
+ 288              		.thumb_func
+ 289              		.fpu softvfp
+ 291              	i2c_stop:
+ 292              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 6
+
+
+ 293              		@ frame_needed = 1, uses_anonymous_args = 0
+ 294 0000 80B5     		push	{r7, lr}
+ 295 0002 00AF     		add	r7, sp, #0
+ 296 0004 0121     		movs	r1, #1
+ 297 0006 0B48     		ldr	r0, .L19
+ 298 0008 FFF7FEFF 		bl	GPIO_ResetBits
+ 299 000c 0320     		movs	r0, #3
+ 300 000e FFF7FEFF 		bl	delay_us
+ 301 0012 0221     		movs	r1, #2
+ 302 0014 0748     		ldr	r0, .L19
+ 303 0016 FFF7FEFF 		bl	GPIO_SetBits
+ 304 001a 0320     		movs	r0, #3
+ 305 001c FFF7FEFF 		bl	delay_us
+ 306 0020 0121     		movs	r1, #1
+ 307 0022 0448     		ldr	r0, .L19
+ 308 0024 FFF7FEFF 		bl	GPIO_SetBits
+ 309 0028 0320     		movs	r0, #3
+ 310 002a FFF7FEFF 		bl	delay_us
+ 311 002e 00BF     		nop
+ 312 0030 80BD     		pop	{r7, pc}
+ 313              	.L20:
+ 314 0032 00BF     		.align	2
+ 315              	.L19:
+ 316 0034 00080140 		.word	1073809408
+ 318              		.section	.text.i2c_write,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	i2c_write
+ 321              		.syntax unified
+ 322              		.thumb
+ 323              		.thumb_func
+ 324              		.fpu softvfp
+ 326              	i2c_write:
+ 327              		@ args = 0, pretend = 0, frame = 16
+ 328              		@ frame_needed = 1, uses_anonymous_args = 0
+ 329 0000 80B5     		push	{r7, lr}
+ 330 0002 84B0     		sub	sp, sp, #16
+ 331 0004 00AF     		add	r7, sp, #0
+ 332 0006 0346     		mov	r3, r0
+ 333 0008 FB71     		strb	r3, [r7, #7]
+ 334 000a 0023     		movs	r3, #0
+ 335 000c FB73     		strb	r3, [r7, #15]
+ 336 000e 23E0     		b	.L22
+ 337              	.L25:
+ 338 0010 97F90730 		ldrsb	r3, [r7, #7]
+ 339 0014 002B     		cmp	r3, #0
+ 340 0016 04DA     		bge	.L23
+ 341 0018 0121     		movs	r1, #1
+ 342 001a 2548     		ldr	r0, .L29
+ 343 001c FFF7FEFF 		bl	GPIO_SetBits
+ 344 0020 03E0     		b	.L24
+ 345              	.L23:
+ 346 0022 0121     		movs	r1, #1
+ 347 0024 2248     		ldr	r0, .L29
+ 348 0026 FFF7FEFF 		bl	GPIO_ResetBits
+ 349              	.L24:
+ 350 002a 0320     		movs	r0, #3
+ 351 002c FFF7FEFF 		bl	delay_us
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 7
+
+
+ 352 0030 0221     		movs	r1, #2
+ 353 0032 1F48     		ldr	r0, .L29
+ 354 0034 FFF7FEFF 		bl	GPIO_SetBits
+ 355 0038 0520     		movs	r0, #5
+ 356 003a FFF7FEFF 		bl	delay_us
+ 357 003e 0221     		movs	r1, #2
+ 358 0040 1B48     		ldr	r0, .L29
+ 359 0042 FFF7FEFF 		bl	GPIO_ResetBits
+ 360 0046 0220     		movs	r0, #2
+ 361 0048 FFF7FEFF 		bl	delay_us
+ 362 004c FB79     		ldrb	r3, [r7, #7]
+ 363 004e 5B00     		lsls	r3, r3, #1
+ 364 0050 FB71     		strb	r3, [r7, #7]
+ 365 0052 FB7B     		ldrb	r3, [r7, #15]
+ 366 0054 0133     		adds	r3, r3, #1
+ 367 0056 FB73     		strb	r3, [r7, #15]
+ 368              	.L22:
+ 369 0058 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 370 005a 072B     		cmp	r3, #7
+ 371 005c D8D9     		bls	.L25
+ 372 005e 0121     		movs	r1, #1
+ 373 0060 1348     		ldr	r0, .L29
+ 374 0062 FFF7FEFF 		bl	GPIO_SetBits
+ 375 0066 0320     		movs	r0, #3
+ 376 0068 FFF7FEFF 		bl	delay_us
+ 377 006c 0221     		movs	r1, #2
+ 378 006e 1048     		ldr	r0, .L29
+ 379 0070 FFF7FEFF 		bl	GPIO_SetBits
+ 380 0074 0320     		movs	r0, #3
+ 381 0076 FFF7FEFF 		bl	delay_us
+ 382 007a 0121     		movs	r1, #1
+ 383 007c 0C48     		ldr	r0, .L29
+ 384 007e FFF7FEFF 		bl	GPIO_ReadInputDataBit
+ 385 0082 0346     		mov	r3, r0
+ 386 0084 002B     		cmp	r3, #0
+ 387 0086 02D0     		beq	.L26
+ 388 0088 0023     		movs	r3, #0
+ 389 008a BB73     		strb	r3, [r7, #14]
+ 390 008c 01E0     		b	.L27
+ 391              	.L26:
+ 392 008e 0123     		movs	r3, #1
+ 393 0090 BB73     		strb	r3, [r7, #14]
+ 394              	.L27:
+ 395 0092 0220     		movs	r0, #2
+ 396 0094 FFF7FEFF 		bl	delay_us
+ 397 0098 0221     		movs	r1, #2
+ 398 009a 0548     		ldr	r0, .L29
+ 399 009c FFF7FEFF 		bl	GPIO_ResetBits
+ 400 00a0 0520     		movs	r0, #5
+ 401 00a2 FFF7FEFF 		bl	delay_us
+ 402 00a6 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 403 00a8 1846     		mov	r0, r3
+ 404 00aa 1037     		adds	r7, r7, #16
+ 405 00ac BD46     		mov	sp, r7
+ 406              		@ sp needed
+ 407 00ae 80BD     		pop	{r7, pc}
+ 408              	.L30:
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 8
+
+
+ 409              		.align	2
+ 410              	.L29:
+ 411 00b0 00080140 		.word	1073809408
+ 413              		.section	.text.i2c_read,"ax",%progbits
+ 414              		.align	1
+ 415              		.global	i2c_read
+ 416              		.syntax unified
+ 417              		.thumb
+ 418              		.thumb_func
+ 419              		.fpu softvfp
+ 421              	i2c_read:
+ 422              		@ args = 0, pretend = 0, frame = 16
+ 423              		@ frame_needed = 1, uses_anonymous_args = 0
+ 424 0000 80B5     		push	{r7, lr}
+ 425 0002 84B0     		sub	sp, sp, #16
+ 426 0004 00AF     		add	r7, sp, #0
+ 427 0006 0346     		mov	r3, r0
+ 428 0008 FB71     		strb	r3, [r7, #7]
+ 429 000a 0121     		movs	r1, #1
+ 430 000c 2748     		ldr	r0, .L38
+ 431 000e FFF7FEFF 		bl	GPIO_SetBits
+ 432 0012 0320     		movs	r0, #3
+ 433 0014 FFF7FEFF 		bl	delay_us
+ 434 0018 0023     		movs	r3, #0
+ 435 001a FB73     		strb	r3, [r7, #15]
+ 436 001c 21E0     		b	.L32
+ 437              	.L34:
+ 438 001e BB7B     		ldrb	r3, [r7, #14]
+ 439 0020 5B00     		lsls	r3, r3, #1
+ 440 0022 BB73     		strb	r3, [r7, #14]
+ 441 0024 0221     		movs	r1, #2
+ 442 0026 2148     		ldr	r0, .L38
+ 443 0028 FFF7FEFF 		bl	GPIO_SetBits
+ 444 002c 0320     		movs	r0, #3
+ 445 002e FFF7FEFF 		bl	delay_us
+ 446 0032 0121     		movs	r1, #1
+ 447 0034 1D48     		ldr	r0, .L38
+ 448 0036 FFF7FEFF 		bl	GPIO_ReadInputDataBit
+ 449 003a 0346     		mov	r3, r0
+ 450 003c 002B     		cmp	r3, #0
+ 451 003e 03D0     		beq	.L33
+ 452 0040 BB7B     		ldrb	r3, [r7, #14]
+ 453 0042 43F00103 		orr	r3, r3, #1
+ 454 0046 BB73     		strb	r3, [r7, #14]
+ 455              	.L33:
+ 456 0048 0220     		movs	r0, #2
+ 457 004a FFF7FEFF 		bl	delay_us
+ 458 004e 0221     		movs	r1, #2
+ 459 0050 1648     		ldr	r0, .L38
+ 460 0052 FFF7FEFF 		bl	GPIO_ResetBits
+ 461 0056 0520     		movs	r0, #5
+ 462 0058 FFF7FEFF 		bl	delay_us
+ 463 005c FB7B     		ldrb	r3, [r7, #15]
+ 464 005e 0133     		adds	r3, r3, #1
+ 465 0060 FB73     		strb	r3, [r7, #15]
+ 466              	.L32:
+ 467 0062 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 9
+
+
+ 468 0064 072B     		cmp	r3, #7
+ 469 0066 DAD9     		bls	.L34
+ 470 0068 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 471 006a 002B     		cmp	r3, #0
+ 472 006c 04D0     		beq	.L35
+ 473 006e 0121     		movs	r1, #1
+ 474 0070 0E48     		ldr	r0, .L38
+ 475 0072 FFF7FEFF 		bl	GPIO_ResetBits
+ 476 0076 03E0     		b	.L36
+ 477              	.L35:
+ 478 0078 0121     		movs	r1, #1
+ 479 007a 0C48     		ldr	r0, .L38
+ 480 007c FFF7FEFF 		bl	GPIO_SetBits
+ 481              	.L36:
+ 482 0080 0320     		movs	r0, #3
+ 483 0082 FFF7FEFF 		bl	delay_us
+ 484 0086 0221     		movs	r1, #2
+ 485 0088 0848     		ldr	r0, .L38
+ 486 008a FFF7FEFF 		bl	GPIO_SetBits
+ 487 008e 0520     		movs	r0, #5
+ 488 0090 FFF7FEFF 		bl	delay_us
+ 489 0094 0221     		movs	r1, #2
+ 490 0096 0548     		ldr	r0, .L38
+ 491 0098 FFF7FEFF 		bl	GPIO_ResetBits
+ 492 009c 0520     		movs	r0, #5
+ 493 009e FFF7FEFF 		bl	delay_us
+ 494 00a2 BB7B     		ldrb	r3, [r7, #14]	@ zero_extendqisi2
+ 495 00a4 1846     		mov	r0, r3
+ 496 00a6 1037     		adds	r7, r7, #16
+ 497 00a8 BD46     		mov	sp, r7
+ 498              		@ sp needed
+ 499 00aa 80BD     		pop	{r7, pc}
+ 500              	.L39:
+ 501              		.align	2
+ 502              	.L38:
+ 503 00ac 00080140 		.word	1073809408
+ 505              		.section	.text.send,"ax",%progbits
+ 506              		.align	1
+ 507              		.global	send
+ 508              		.syntax unified
+ 509              		.thumb
+ 510              		.thumb_func
+ 511              		.fpu softvfp
+ 513              	send:
+ 514              		@ args = 0, pretend = 0, frame = 16
+ 515              		@ frame_needed = 1, uses_anonymous_args = 0
+ 516 0000 80B5     		push	{r7, lr}
+ 517 0002 84B0     		sub	sp, sp, #16
+ 518 0004 00AF     		add	r7, sp, #0
+ 519 0006 0346     		mov	r3, r0
+ 520 0008 FB71     		strb	r3, [r7, #7]
+ 521 000a 0023     		movs	r3, #0
+ 522 000c FB73     		strb	r3, [r7, #15]
+ 523 000e 26E0     		b	.L41
+ 524              	.L44:
+ 525 0010 97F90730 		ldrsb	r3, [r7, #7]
+ 526 0014 002B     		cmp	r3, #0
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 10
+
+
+ 527 0016 0EDA     		bge	.L42
+ 528 0018 0121     		movs	r1, #1
+ 529 001a 1548     		ldr	r0, .L45
+ 530 001c FFF7FEFF 		bl	GPIO_SetBits
+ 531 0020 0420     		movs	r0, #4
+ 532 0022 FFF7FEFF 		bl	Delay_Ms
+ 533 0026 0121     		movs	r1, #1
+ 534 0028 1148     		ldr	r0, .L45
+ 535 002a FFF7FEFF 		bl	GPIO_ResetBits
+ 536 002e 0120     		movs	r0, #1
+ 537 0030 FFF7FEFF 		bl	Delay_Ms
+ 538 0034 0DE0     		b	.L43
+ 539              	.L42:
+ 540 0036 0121     		movs	r1, #1
+ 541 0038 0D48     		ldr	r0, .L45
+ 542 003a FFF7FEFF 		bl	GPIO_SetBits
+ 543 003e 0120     		movs	r0, #1
+ 544 0040 FFF7FEFF 		bl	Delay_Ms
+ 545 0044 0121     		movs	r1, #1
+ 546 0046 0A48     		ldr	r0, .L45
+ 547 0048 FFF7FEFF 		bl	GPIO_ResetBits
+ 548 004c 0420     		movs	r0, #4
+ 549 004e FFF7FEFF 		bl	Delay_Ms
+ 550              	.L43:
+ 551 0052 FB79     		ldrb	r3, [r7, #7]
+ 552 0054 5B00     		lsls	r3, r3, #1
+ 553 0056 FB71     		strb	r3, [r7, #7]
+ 554 0058 FB7B     		ldrb	r3, [r7, #15]
+ 555 005a 0133     		adds	r3, r3, #1
+ 556 005c FB73     		strb	r3, [r7, #15]
+ 557              	.L41:
+ 558 005e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 559 0060 072B     		cmp	r3, #7
+ 560 0062 D5D9     		bls	.L44
+ 561 0064 00BF     		nop
+ 562 0066 00BF     		nop
+ 563 0068 1037     		adds	r7, r7, #16
+ 564 006a BD46     		mov	sp, r7
+ 565              		@ sp needed
+ 566 006c 80BD     		pop	{r7, pc}
+ 567              	.L46:
+ 568 006e 00BF     		.align	2
+ 569              	.L45:
+ 570 0070 00080140 		.word	1073809408
+ 572              		.ident	"GCC: (GNU) 10.1.0"
+ARM GAS  C:\msys64\tmp\cc5qFeLf.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+C:\msys64\tmp\cc5qFeLf.s:14     .rodata:0000000000000000 $d
+C:\msys64\tmp\cc5qFeLf.s:21     .text.main:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:29     .text.main:0000000000000000 main
+C:\msys64\tmp\cc5qFeLf.s:208    .text.i2c_init:0000000000000000 i2c_init
+C:\msys64\tmp\cc5qFeLf.s:176    .text.Delay_Ms:0000000000000000 Delay_Ms
+C:\msys64\tmp\cc5qFeLf.s:102    .text.main:00000000000000bc $d
+C:\msys64\tmp\cc5qFeLf.s:108    .text.Delay1Ms:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:115    .text.Delay1Ms:0000000000000000 Delay1Ms
+C:\msys64\tmp\cc5qFeLf.s:135    .text.delay_us:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:142    .text.delay_us:0000000000000000 delay_us
+C:\msys64\tmp\cc5qFeLf.s:169    .text.Delay_Ms:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:201    .text.i2c_init:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:241    .text.i2c_init:000000000000003c $d
+C:\msys64\tmp\cc5qFeLf.s:244    .text.i2c_start:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:251    .text.i2c_start:0000000000000000 i2c_start
+C:\msys64\tmp\cc5qFeLf.s:281    .text.i2c_start:0000000000000040 $d
+C:\msys64\tmp\cc5qFeLf.s:284    .text.i2c_stop:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:291    .text.i2c_stop:0000000000000000 i2c_stop
+C:\msys64\tmp\cc5qFeLf.s:316    .text.i2c_stop:0000000000000034 $d
+C:\msys64\tmp\cc5qFeLf.s:319    .text.i2c_write:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:326    .text.i2c_write:0000000000000000 i2c_write
+C:\msys64\tmp\cc5qFeLf.s:411    .text.i2c_write:00000000000000b0 $d
+C:\msys64\tmp\cc5qFeLf.s:414    .text.i2c_read:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:421    .text.i2c_read:0000000000000000 i2c_read
+C:\msys64\tmp\cc5qFeLf.s:503    .text.i2c_read:00000000000000ac $d
+C:\msys64\tmp\cc5qFeLf.s:506    .text.send:0000000000000000 $t
+C:\msys64\tmp\cc5qFeLf.s:513    .text.send:0000000000000000 send
+C:\msys64\tmp\cc5qFeLf.s:570    .text.send:0000000000000070 $d
+
+UNDEFINED SYMBOLS
+RCC_APB2PeriphClockCmd
+RCC_APB1PeriphClockCmd
+GPIO_Init
+TIM_TimeBaseInit
+TIM_Cmd
+I2C_LCD_Init
+I2C_LCD_Clear
+I2C_LCD_BackLight
+I2C_LCD_Puts
+I2C_LCD_NewLine
+GPIO_SetBits
+GPIO_ResetBits
+TIM_SetCounter
+TIM_GetCounter
+GPIO_ReadInputDataBit
